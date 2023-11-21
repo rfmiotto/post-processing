@@ -27,6 +27,11 @@ profile = "black"
 multi_line_output = 3
 src_paths = ["post_process", "tests"]
 
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = "--doctest-modules"
+
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
