@@ -32,6 +32,14 @@ pythonpath = "."
 addopts = "--doctest-modules"
 
 
+[tool.taskipy.tasks]
+lint = "isort ."
+docs = "mkdocs serve"
+pre_test = "task lint"
+test = "pytest -s -x --cov=post_process -vv"
+post_test = "coverage html"
+
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
