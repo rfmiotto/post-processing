@@ -13,9 +13,8 @@ from dataclasses import dataclass, field
 from typing import Literal
 
 import numpy as np
-from nptyping import Float, NDArray, Shape
 
-ArrayMxN = NDArray[Shape["*, *"], Float]
+from post_process.my_types import Array2D
 
 
 @dataclass
@@ -30,33 +29,33 @@ class Metrics:
 
     # pylint: disable=too-many-instance-attributes
 
-    x: ArrayMxN
-    y: ArrayMxN
+    x: Array2D
+    y: Array2D
 
-    normal_x: ArrayMxN = field(init=False)
-    normal_y: ArrayMxN = field(init=False)
+    normal_x: Array2D = field(init=False)
+    normal_y: Array2D = field(init=False)
 
-    dAdx: ArrayMxN = field(init=False)
-    dBdx: ArrayMxN = field(init=False)
-    dAdy: ArrayMxN = field(init=False)
-    dBdy: ArrayMxN = field(init=False)
+    dAdx: Array2D = field(init=False)
+    dBdx: Array2D = field(init=False)
+    dAdy: Array2D = field(init=False)
+    dBdy: Array2D = field(init=False)
 
-    dxdA: ArrayMxN = field(init=False)
-    dxdB: ArrayMxN = field(init=False)
-    dydA: ArrayMxN = field(init=False)
-    dydB: ArrayMxN = field(init=False)
+    dxdA: Array2D = field(init=False)
+    dxdB: Array2D = field(init=False)
+    dydA: Array2D = field(init=False)
+    dydB: Array2D = field(init=False)
 
     # scale factors
-    h1: ArrayMxN = field(init=False)
-    h2: ArrayMxN = field(init=False)
+    h1: Array2D = field(init=False)
+    h2: Array2D = field(init=False)
 
-    jacobian: ArrayMxN = field(init=False)
+    jacobian: Array2D = field(init=False)
 
     orientation: Literal["clockwise", "counterclockwise"] = field(init=False)
 
     def __post_init__(self) -> None:
         # if type(self.x) != np.ndarray or type(self.y) != np.ndarray:
-        if not isinstance(self.x, ArrayMxN) or not isinstance(self.y, ArrayMxN):
+        if not isinstance(self.x, Array2D) or not isinstance(self.y, Array2D):
             raise TypeError("`x` and `y` must be numpy arrays")
 
         self.dxdA, self.dxdB = np.gradient(self.x, edge_order=2)

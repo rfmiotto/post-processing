@@ -3,7 +3,8 @@ from typing import Tuple
 import numpy as np
 import pytest
 
-from post_process.metrics import ArrayMxN, Metrics
+from post_process.metrics import Metrics
+from post_process.my_types import Array2D
 
 
 @pytest.mark.parametrize(
@@ -22,7 +23,7 @@ def test_error_if_inputs_are_not_numpy_arrays_of_floats(x, y) -> None:
 
 
 @pytest.fixture
-def cylinder_mesh(request) -> Tuple[ArrayMxN, ArrayMxN]:
+def cylinder_mesh(request) -> Tuple[Array2D, Array2D]:
     init_radius = 0.1
     final_radius = 1.0
     num_points_r = 4
@@ -57,10 +58,10 @@ def test_mesh_is_counterclockwise(cylinder_mesh):
 @pytest.mark.parametrize("cylinder_mesh", [True], indirect=True)
 def test_dx_alias(cylinder_mesh):
     metrics = Metrics(*cylinder_mesh)
-    assert isinstance(metrics.dx, ArrayMxN)
+    assert isinstance(metrics.dx, Array2D)
 
 
 @pytest.mark.parametrize("cylinder_mesh", [True], indirect=True)
 def test_dy_alias(cylinder_mesh):
     metrics = Metrics(*cylinder_mesh)
-    assert isinstance(metrics.dy, ArrayMxN)
+    assert isinstance(metrics.dy, Array2D)
