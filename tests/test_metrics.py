@@ -1,9 +1,12 @@
 from typing import Tuple
 
+import hypothesis.extra.numpy as nps
 import numpy as np
 import pytest
+from hypothesis import given
+from hypothesis import strategies as st
 
-from post_process.metrics import Metrics
+from post_process.metrics_pydantic import Metrics
 from post_process.my_types import Array2D
 
 
@@ -22,8 +25,41 @@ def test_error_if_inputs_are_not_numpy_arrays_of_floats(x, y) -> None:
         Metrics(x, y)
 
 
-@pytest.fixture
-def cylinder_mesh(request) -> Tuple[Array2D, Array2D]:
+num_points = st.integers(min_value=10, max_value=20)
+inputs = nps.arrays(
+    dtype=float,
+    shape=st.shared(st.tuples(num_points, num_points)),
+    elements=st.floats(-1, 1),
+)
+
+other_num_points = st.integers(min_value=4, max_value=9)
+inputs_different_shape = nps.arrays(
+    dtype=float,
+    shape=st.shared(st.tuples(other_num_points, other_num_points)),
+    elements=st.floats(-1, 1),
+)
+
+
+@given(inputs, inputs)
+def test_good_instantiation(x, y):
+    Metrics(x, y)
+
+
+@given(inputs, inputs)
+def test_cannot_instantiate_nan(x, y):
+    x[0] = np.nan  # force it to have NaN
+    with pytest.raises(ValueError):
+        Metrics(x, y)
+
+
+@given(inputs, inputs_different_shape)
+def test_cannot_instantiate_different_shape(x, y):
+    with pytest.raises(ValueError):
+        Metrics(x, y)
+
+
+@pytest.fixture(name="cylinder_mesh")
+def fixture_cylinder_mesh(request) -> Tuple[Array2D, Array2D]:
     init_radius = 0.1
     final_radius = 1.0
     num_points_r = 4

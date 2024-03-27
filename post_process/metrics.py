@@ -58,6 +58,12 @@ class Metrics:
         if not isinstance(self.x, Array2D) or not isinstance(self.y, Array2D):
             raise TypeError("`x` and `y` must be numpy arrays")
 
+        if np.isnan(np.sum(self.x)) or np.isnan(np.sum(self.y)):
+            raise ValueError("NaN appeared in coordinate values")
+
+        if self.x.shape != self.y.shape:
+            raise ValueError("x- and y-coordinates must have the same shape")
+
         self.dxdA, self.dxdB = np.gradient(self.x, edge_order=2)
         self.dydA, self.dydB = np.gradient(self.y, edge_order=2)
 

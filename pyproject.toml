@@ -8,6 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.9"
 numpy = "^1.26.2"
+pydantic = "^2.5.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.3"
@@ -16,6 +17,8 @@ black = "^23.11.0"
 isort = "^5.12.0"
 taskipy = "^1.12.0"
 nptyping = "^2.5.0"
+hypothesis = "^6.91.0"
+hypofuzz = "^23.7.1"
 
 
 [tool.poetry.group.doc.dependencies]
